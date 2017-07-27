@@ -1,22 +1,26 @@
 import _ from 'lodash';
-import './style.css';
-import Icon from './butterfly.png';
-import Data from './data.xml';
+import printMe from './print.js';
+import './styles.css';
+
+if (module.hot) {
+  module.hot.accept('./print.js', function() {
+    console.log('Accepting the updated printMe module!');
+    printMe();
+  });
+}
+
 
 function component() {
-  let element = document.createElement('div');
+  var element = document.createElement('div');
+  var btn = document.createElement('button');
 
-  // Lodash, now imported by this script
-  element.innerHTML = _.join(['Hello>', 'webpack>'], ' ');
-  element.classList.add('hello');
 
-  // Add the image to our existing div
-  var myIcon = new Image();
-  myIcon.src = Icon;
+  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
 
-  element.appendChild(myIcon);
+  btn.innerHTML = 'Click me and check the console!';
+  btn.onclick = printMe;
 
-  console.log(Data);
+  element.appendChild(btn);
 
   return element;
 }
