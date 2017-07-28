@@ -5,13 +5,16 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    app: './src/index.js',
+    main: './src/index.js',
+    vendor: [
+        'lodash'
+    ],
     print: './src/print.js'
   },
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist',
-    hot: true
+    hot: false
   },
   module: {
     rules: [
@@ -22,14 +25,20 @@ module.exports = {
     ]
   },
   output: {
-    filename: '[name].bundle.js',
+    filename: '[name].[chunkhash].js',
     path: path.resolve(__dirname, 'dist')
   },
   plugins: [
     new CleanWebPackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      title: 'Hot Module Replacement'
+      title: 'Caching'
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HashedModuleIdsPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor'
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'runtime'
+    })
   ],
 };
